@@ -178,6 +178,10 @@ body.contraste .card,body.contraste .num,body.contraste .tile,body.contraste .in
 pre{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85rem;white-space:pre-wrap;word-break:break-word;
   background:var(--bg);border:1.5px dashed var(--line);border-radius:12px;padding:12px}
 .attest{border:2px solid var(--accent);text-align:center;align-items:center}
+.big-name{font-family:var(--display);font-size:1.2rem;font-weight:800;line-height:1.2}
+.row2{display:flex;gap:10px;flex-wrap:wrap}
+.row2 > *{flex:1 1 140px}
+.rowline .mini.btn{min-height:0;padding:8px 12px;border-radius:999px;font-size:.8rem;background:var(--soft)}
 .note{border-left:4px solid var(--warn);padding:10px 12px;background:var(--soft);border-radius:0 12px 12px 0;font-size:.9rem}
 ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
 .status{font-weight:600}
@@ -207,6 +211,7 @@ ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
 <!-- Ordre : le socle, le pays, la base, la langue, puis un fichier par fonctionnalité -->
 <script src="core.js"></script>
 <script src="config/sn.js"></script>
+<script src="config/centres.js"></script>
 <script src="config/base.js"></script>
 <script src="i18n/fr.js"></script>
 <script src="i18n/wo.js"></script>

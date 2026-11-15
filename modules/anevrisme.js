@@ -23,11 +23,11 @@ CAA.register({id:'anevrisme', render:function(view){
     var n = SIGNS.filter(function(x){ return ans[x] !== 'non'; }).length;
     CAA.track('test_anevrisme', {tete:ans.tete, nuque:ans.nuque, lumiere:ans.lumiere, debut:ans.debut, signes:n});
     if (ans.tete === 'non') return calm(n > 0 ? 'doute' : 'rien');
+    var clin = {tete:'Céphalée brutale d\'intensité extrême', nuque:'Raideur de nuque', lumiere:'Photophobie ou vomissements'};
     CAA.alerte(view, {
-      sur:t('anevrisme.alerte.sur'), titre:t('fast.alerte.titre'), voix:t('anevrisme.alerte.voix'), voixCle:'anevrisme.alerte.voix', debut:ans.debut,
+      type:'rupture d\'anévrisme', de:'de rupture d\'anévrisme', sur:t('anevrisme.alerte.sur'), titre:t('fast.alerte.titre'), voix:t('anevrisme.alerte.voix'), voixCle:'anevrisme.alerte.voix', debut:ans.debut,
       resume:SIGNS.map(function(x){ return t('anevrisme.etapes.' + x).nom + ' : ' + t('fast.choix.' + ans[x]).toLowerCase(); }).join(' · '),
-      smsTitre:t('anevrisme.alerte.sms'),
-      smsSignes:SIGNS.map(function(x){ return t('anevrisme.etapes.' + x).nom + ' ' + ans[x].toUpperCase(); }).join(' / '),
+      signes:SIGNS.map(function(x){ return [clin[x], ans[x]]; }),
       refaire:restart
     });
   }

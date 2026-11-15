@@ -22,11 +22,11 @@ CAA.register({id:'fast', icone:'alerte', urgent:true, render:function(view){
     var n = SIGNS.filter(function(x){ return ans[x] !== 'non'; }).length;
     CAA.track('test_avc', {visage:ans.visage, bras:ans.bras, parole:ans.parole, debut:ans.debut, signes:n});
     if (n === 0) return clear();
+    var clin = {visage:'Asymétrie faciale', bras:'Déficit moteur d\'un bras', parole:'Trouble de la parole'};
     CAA.alerte(view, {
-      sur:t('fast.alerte.sur'), titre:t('fast.alerte.titre'), voix:t('fast.alerte.voix'), debut:ans.debut,
+      type:'AVC', de:'d\'AVC', sur:t('fast.alerte.sur'), titre:t('fast.alerte.titre'), voix:t('fast.alerte.voix'), debut:ans.debut,
       resume:SIGNS.map(function(x){ return t('fast.etapes.' + x).nom + ' : ' + t('fast.choix.' + ans[x]).toLowerCase(); }).join(' · '),
-      smsTitre:t('fast.sms.titre'),
-      smsSignes:SIGNS.map(function(x){ return t('fast.etapes.' + x).nom + ' ' + ans[x].toUpperCase(); }).join(' / '),
+      signes:SIGNS.map(function(x){ return [clin[x], ans[x]]; }),
       refaire:restart
     });
   }

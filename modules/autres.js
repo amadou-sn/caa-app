@@ -4,10 +4,19 @@ CAA.register({id:'proches', render:function(view){
   var ui = CAA.ui, h = ui.h, t = CAA.t;
   function draw(){
     view.innerHTML = '';
-    var list = CAA.store.get('proches', []);
+    var list = CAA.store.get('proches', []), moi = CAA.store.get('moi', {nom:'', tel:''});
     view.appendChild(ui.head('proches'));
     view.appendChild(h('p', {class:'muted', text:t('proches.intro')}));
-    view.appendChild(ui.card(null, list.length ? [h('div', {class:'rows'}, list.map(function(p, i){
+
+    /* Moi : nom et numéro mis dans les messages pour qu'on puisse me rappeler */
+    var mnom = h('input', {type:'text', id:'mnom', placeholder:t('proches.moi_exnom'), autocomplete:'off'}); mnom.value = moi.nom || '';
+    var mtel = h('input', {type:'text', id:'mtel', inputmode:'tel', placeholder:t('proches.exnum'), autocomplete:'off'}); mtel.value = moi.tel || '';
+    var ok = h('p', {class:'small muted', hidden:true, text:t('proches.moi_ok')});
+    view.appendChild(ui.card(t('proches.moi'), [h('p', {class:'small muted', text:t('proches.moi_note')}),
+      h('label', {for:'mnom'}, [t('proches.moi_nom'), mnom]), h('label', {for:'mtel'}, [t('proches.moi_tel'), mtel]),
+      h('button', {class:'ghost', text:t('proches.moi_enregistrer'), onclick:function(){ CAA.store.set('moi', {nom:mnom.value.trim(), tel:mtel.value.trim()}); ok.hidden = false; }}), ok]));
+
+    view.appendChild(ui.card(t('proches.liste'), list.length ? [h('div', {class:'rows'}, list.map(function(p, i){
       return h('div', {class:'rowline'}, [h('b', {text:p.nom}), h('span', {class:'tab muted', text:p.numero}),
         h('button', {class:'mini', text:t('commun.supprimer'), onclick:function(){ list.splice(i, 1); CAA.store.set('proches', list); draw(); }})]);
     }))] : [h('p', {class:'muted', text:t('proches.vide')})]));
@@ -30,26 +39,48 @@ CAA.register({id:'proches', render:function(view){
   draw();
 }});
 
+/* Centres : 1) la structure de santé la plus proche, quelle qu'elle soit ; 2) les services AVC, destinataires des alertes */
 CAA.register({id:'hopitaux', render:function(view){
   var ui = CAA.ui, h = ui.h, t = CAA.t, pos = null, region = CAA.pref('region') || '';
-  var regions = CAA.pays.hopitaux.map(function(x){ return x.region; }).filter(function(r, i, a){ return a.indexOf(r) === i; });
+  var regions = CAA.structures().map(function(x){ return x.region; }).filter(function(r, i, a){ return a.indexOf(r) === i; }).sort();
   function draw(msg){
     view.innerHTML = '';
     view.appendChild(ui.head('hopitaux'));
     var cx = CAA.centres(pos);
-    view.appendChild(CAA.carte({pos:pos, points:CAA.pays.hopitaux, cible: pos ? cx.cible : null, proche: pos ? cx.proche : null}));
-    if (pos && cx.cible) view.appendChild(h('p', {class:'instr', text:t('routage.resume', {proche:cx.proche.nom, kmp:Math.round(cx.dProche), cible:cx.cible.nom, kmc:Math.round(cx.dCible)})}));
+
+    /* 1. Autour de moi */
     var sel = h('select', {id:'region', onchange:function(){ region = sel.value; draw(); }},
-      [h('option', {value:'', text:t('hopitaux.toutes')})].concat(regions.map(function(r){ return h('option', {value:r, text:r, selected: r === region ? 'selected' : null}); })));
-    view.appendChild(h('div', {class:'stack'}, [
-      h('button', {class:'primary', text:t('hopitaux.autour'), onclick:function(){
+      [h('option', {value:'', text:t('hopitaux.choisir')})].concat(regions.map(function(r){ return h('option', {value:r, text:r, selected: r === region ? 'selected' : null}); })));
+    var autour = [h('button', {class:'primary', text:t('hopitaux.autour'), onclick:function(){
         draw(t('hopitaux.cherche'));
         CAA.locate(function(p){ pos = p; draw(p ? null : t('hopitaux.gpsko')); });
-      }}),
-      msg ? h('p', {class:'status', text:msg}) : null, sel
-    ]));
-    var list = CAA.pays.hopitaux.filter(function(x){ return !region || x.region === region; })
-      .map(function(x){ return {x:x, d: pos ? CAA.km(pos, x) : null}; });
+      }}), msg ? h('p', {class:'status', text:msg}) : null];
+    if (pos){
+      autour.push(h('div', {class:'rows'}, cx.proches.map(function(x, i){
+        return h('div', {class:'rowline'}, [h('span', {class:'pill ' + (i === 0 ? 'moyen' : ''), text:Math.round(CAA.km(pos, x)) + ' km'}),
+          h('div', {class:'stack tight', style:'flex:1;min-width:0'}, [h('b', {text:x.nom}), h('span', {class:'small muted', text:x.region})]),
+          h('a', {class:'mini btn', href:'https://maps.google.com/?q=' + x.lat + ',' + x.lon, target:'_blank', rel:'noopener', text:t('hopitaux.y_aller')})]);
+      })));
+    } else {
+      autour.push(h('label', {for:'region'}, [t('hopitaux.ou_region'), sel]));
+      if (region){
+        var inReg = CAA.structures().filter(function(x){ return x.region === region; });
+        autour.push(h('p', {class:'small muted', text:t('hopitaux.n_region', {n:inReg.length, region:region})}));
+        autour.push(h('div', {class:'rows'}, inReg.slice(0, 15).map(function(x){
+          return h('div', {class:'rowline'}, [h('span', {class:'pill', text:t('hopitaux.type_' + x.type)}),
+            h('b', {style:'flex:1;min-width:0', text:x.court}),
+            h('a', {class:'mini btn', href:'https://maps.google.com/?q=' + x.lat + ',' + x.lon, target:'_blank', rel:'noopener', text:t('hopitaux.y_aller')})]);
+        })));
+      }
+    }
+    autour.push(h('p', {class:'small muted', text:t('hopitaux.source', {n:CAA.structures().length})}));
+    view.appendChild(ui.card(t('hopitaux.proches_titre'), autour));
+
+    /* 2. Services AVC */
+    view.appendChild(h('div', {class:'stack'}, [ui.label(t('hopitaux.avc_titre')), h('p', {class:'small muted', text:t('hopitaux.avc_intro')})]));
+    view.appendChild(CAA.carte({pos:pos, points:CAA.pays.avc, cible: pos ? cx.cible : null, proche: pos ? cx.proche : null}));
+    if (pos && cx.cible) view.appendChild(h('p', {class:'instr', text:t('routage.resume', {proche:cx.proche.nom, kmp:Math.round(cx.dProche), cible:cx.cible.nom, kmc:Math.round(cx.dCible)})}));
+    var list = CAA.pays.avc.map(function(x){ return {x:x, d: pos ? CAA.km(pos, x) : null}; });
     if (pos) list.sort(function(a, b){ return a.d - b.d; });
     view.appendChild(h('div', {class:'stack'}, list.map(function(o){
       return h('div', {class:'card'}, [
@@ -97,7 +128,7 @@ CAA.register({id:'reglages', hors:true, render:function(view){
     }));
     view.appendChild(ui.card(t('reglages.langue'), [sel, check('voix', t('reglages.voix'), t('reglages.voixnote'))]));
 
-    var regions = CAA.pays.hopitaux.map(function(x){ return x.region; }).filter(function(r, i, a){ return a.indexOf(r) === i; });
+    var regions = CAA.structures().map(function(x){ return x.region; }).filter(function(r, i, a){ return a.indexOf(r) === i; }).sort();
     var reg = h('select', {id:'region', onchange:function(){ S.set('region', reg.value); draw(); }},
       [h('option', {value:'', text:t('reglages.sansregion')})].concat(regions.map(function(r){ return h('option', {value:r, text:r, selected: CAA.pref('region') === r ? 'selected' : null}); })));
     view.appendChild(ui.card(t('reglages.urgence'), [

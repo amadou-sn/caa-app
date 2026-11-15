@@ -73,23 +73,42 @@ CAA.carteSchema = function(o){
   return h('div', {class:'stack'}, [box, leg, h('p', {class:'small muted', text:t('carte.note')})]);
 };
 
-/* Choix des centres : le plus proche de tous (premiers soins) et le service neuro le plus proche (alerte).
-   Sans position : la région choisie dans les réglages, sinon le centre par défaut du pays. */
+/* Les structures de santé (config/centres.js) sous forme d'objets */
+CAA.structures = function(){
+  if (CAA._structures) return CAA._structures;
+  CAA._structures = (CAA.centresSante || []).map(function(r){
+    return {nom:r[0] + (r[1] === 'h' ? ' (hôpital)' : ' (centre de santé)'), court:r[0], type:r[1], region:r[2], lat:r[3], lon:r[4]};
+  });
+  return CAA._structures;
+};
+
+/* Choix des centres :
+   - proche : la structure de santé la plus proche, quelle qu'elle soit (premiers soins, stabilisation) ;
+   - cible  : le service AVC qui reçoit l'alerte, le plus proche à vol d'oiseau, ou celui de la filière de la région.
+   Sans position : la région des réglages, sinon le centre de référence national. */
 CAA.centres = function(pos){
-  var H = CAA.pays.hopitaux;
-  var neuro = H.filter(function(x){ return x.services.some(function(s){ return s === 'neurologie' || s === 'neurochirurgie'; }); });
+  var AVC = CAA.pays.avc, S = CAA.structures();
   var dist = function(x){ return pos ? CAA.km(pos, x) : null; };
-  var byId = function(id){ return H.filter(function(x){ return x.id === id; })[0]; };
+  var byId = function(id){ return AVC.filter(function(x){ return x.id === id; })[0]; };
+  var def = AVC.filter(function(x){ return x.defaut; })[0] || AVC[0];
   if (pos){
     var tri = function(a, b){ return dist(a) - dist(b); };
-    var p = H.slice().sort(tri)[0], n = neuro.slice().sort(tri)[0], mode = 'gps';
-    var ev = (CAA.pays.evacuation || {})[p.region];
+    var proches = S.slice().sort(tri).slice(0, 3), p = proches[0] || null;
+    var n = AVC.slice().sort(tri)[0], mode = 'gps';
+    var ev = p && (CAA.pays.evacuation || {})[p.region];
     if (ev && byId(ev)){ n = byId(ev); mode = 'filiere'; }
-    return {proche:p, cible:n, dProche:dist(p), dCible:dist(n), mode:mode};
+    return {proche:p, proches:proches, cible:n, dProche:p ? dist(p) : null, dCible:dist(n), mode:mode};
   }
   var region = CAA.pref('region');
-  var nr = neuro.filter(function(x){ return x.region === region; })[0];
-  var pr = H.filter(function(x){ return x.region === region; })[0];
-  var def = H.filter(function(x){ return x.defaut; })[0] || neuro[0];
-  return {proche:pr || null, cible:nr || def, dProche:null, dCible:null, mode: nr ? 'region' : 'defaut'};
+  var nr = AVC.filter(function(x){ return x.region === region; })[0];
+  var ev2 = (CAA.pays.evacuation || {})[region];
+  var cible = nr || (ev2 && byId(ev2)) || def;
+  var pr = S.filter(function(x){ return x.region === region; });
+  return {proche:null, proches:pr.slice(0, 3), cible:cible, dProche:null, dCible:null, mode: region ? 'region' : 'defaut'};
+};
+
+/* Identifiant lisible d'une alerte : CAA-AAMMJJ-HHMM */
+CAA.reference = function(d){
+  var p = function(n){ return String(n).padStart(2, '0'); };
+  return 'CAA-' + String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes());
 };

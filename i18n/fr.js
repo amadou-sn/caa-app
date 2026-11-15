@@ -4,7 +4,7 @@ CAA.textes.fr = {
   voix: {code:'fr-FR'},
   commun: {accueil:'Accueil', retour:'Retour', bientot:'Bientôt', copie:'Copié', ajouter:'Ajouter', supprimer:'Retirer', avalider:'À valider avec la CAA.'},
   urgence: {samu:'SAMU national', pompiers:'Sapeurs-pompiers'},
-  nav: {accueil:'Accueil', urgence:'Urgence', hopitaux:'Hôpitaux', reglages:'Réglages'},
+  nav: {accueil:'Accueil', urgence:'Urgence', hopitaux:'Centres', reglages:'Réglages'},
   anevrisme: {
     etapes:{
       tete:{nom:'Mal de tête', q:'Un mal de tête brutal et très violent ?', aide:'Arrivé d\'un coup, souvent décrit comme le pire mal de tête de sa vie.'},
@@ -37,7 +37,7 @@ CAA.textes.fr = {
     risque:{titre:'Mon risque d\'AVC', sous:'8 questions · 1 minute'},
     tension:{titre:'Ma tension', sous:'Carnet de mesures'},
     proches:{titre:'Mes proches', sous:'À prévenir en cas d\'alerte'},
-    hopitaux:{titre:'Hôpitaux', sous:'Les centres près de vous'},
+    hopitaux:{titre:'Centres de santé', sous:'Le plus proche, et les services AVC'},
     apres:{titre:'Après un AVC', sous:'Rééducation, aidants'},
     comprendre:{titre:'Comprendre l\'AVC', sous:'Signes, causes, idées fausses'},
     anevrisme:{titre:'Anévrisme', sous:'Mal de tête brutal'},
@@ -105,15 +105,28 @@ CAA.textes.fr = {
     note:'Seuils indicatifs (140/90 et 180/120), à valider par le neurologue référent.'
   },
   proches: {
-    intro:'Ces personnes seront prévenues en même temps que les secours. Leurs numéros restent sur ce téléphone.',
-    nom:'Prénom ou nom', numero:'Numéro de téléphone', exnom:'Ex. : Awa', exnum:'Ex. : 77 123 45 67',
+    intro:'En cas d\'alerte, ces personnes reçoivent un message simple pour venir vous aider. Tout reste sur ce téléphone.',
+    moi:'Moi', moi_note:'Votre prénom et votre numéro sont mis dans les messages pour que l\'on puisse vous rappeler.',
+    moi_nom:'Mon prénom', moi_exnom:'Ex. : Awa', moi_tel:'Mon numéro', moi_enregistrer:'Enregistrer', moi_ok:'Enregistré.',
+    liste:'Personnes à prévenir', nom:'Prénom ou nom', numero:'Numéro de téléphone', exnom:'Ex. : Moussa', exnum:'Ex. : 77 123 45 67',
     vide:'Aucun proche enregistré.', max:'Cinq proches au maximum.', erreur:'Indiquez un nom et un numéro.'
   },
   hopitaux: {
-    autour:'Trier par distance', cherche:'Recherche de votre position…', gpsko:'GPS indisponible. Choisissez votre région :',
-    toutes:'Toutes les régions', distance:'à environ {km} km',
+    proches_titre:'Structure de santé la plus proche', autour:'Trouver autour de moi', cherche:'Recherche de votre position…',
+    gpsko:'GPS indisponible. Choisissez votre région :', ou_region:'Ou choisissez une région', choisir:'Choisir une région',
+    n_region:'{n} structures connues dans la région de {region} (15 premières affichées).', y_aller:'Y aller',
+    type_h:'Hôpital', type_c:'Centre de santé', source:'{n} hôpitaux et centres de santé géolocalisés (liste consolidée IRESSEF / COUS / ANSD 2023). Postes de santé à venir.',
+    avc_titre:'Services qui prennent en charge l\'AVC', avc_intro:'Seuls ces établissements reçoivent les alertes. Leur liste est à valider avec la CAA.',
+    distance:'à environ {km} km',
     services:{neurologie:'Neurologie', neurochirurgie:'Neurochirurgie', urgences:'Urgences'}, itineraire:'Itinéraire (Google Maps)',
-    note:'Liste indicative, à valider avec la CAA. En urgence, appelez d\'abord le {numero} : le SAMU choisit l\'hôpital.'
+    note:'En urgence, appelez d\'abord le {numero} : le SAMU décide du transport et de la destination.'
+  },
+  messages: {
+    neuro_titre:'Message au service AVC', neuro_intro:'Rédigé pour le personnel soignant : factuel, structuré, en français.',
+    neuro_envoyer:'Envoyer l\'alerte au service', neuro_sms:'Envoyer par SMS depuis mon téléphone',
+    neuro_smsnote:'Long message : 4 à 5 SMS, ou un seul message WhatsApp. Tant que le numéro du service n\'est pas validé, vous choisissez le destinataire.',
+    proches_titre:'Message à mes proches', proches_intro:'Un appel à l\'aide simple, sans vocabulaire médical, pour ne pas affoler.',
+    proches_sms:'Prévenir mes proches par SMS'
   },
   apres: {
     blocs:[
@@ -129,7 +142,10 @@ CAA.textes.fr = {
     osm:'Carte OpenStreetMap. Positions des centres approximatives, à valider.'
   },
   routage: {
-    titre:'Centres de prise en charge', proche:'Centre le plus proche de vous', cible:'Alerte adressée à',
+    titre:'Centres de prise en charge', proche:'Structure de santé la plus proche', cible:'Service AVC qui reçoit l\'alerte',
+    prochenote:'Pour les premiers soins si les secours tardent. Appelez d\'abord le SAMU : c\'est lui qui décide.',
+    procheinconnu:'Position inconnue : impossible de proposer la structure la plus proche.', region_liste:'Dans votre région : {liste}.',
+    autres:'Puis : {liste}.',
     modegps:'Choisi d\'après votre position GPS (distance à vol d\'oiseau).', modefiliere:'Centre de la filière d\'évacuation de votre région.', moderegion:'Choisi d\'après la région indiquée dans vos réglages.', modedefaut:'Position inconnue : centre de référence national.',
     confirm:'Le centre confirmera la prise en charge après réception. En attendant, suivez les consignes du SAMU.',
     attente:'Alerte envoyée · en attente de confirmation du centre',
