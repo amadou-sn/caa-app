@@ -9,10 +9,11 @@ CAA.register({id:'fast', icone:'alerte', urgent:true, render:function(view){
     var choix = k === 'debut'
       ? t('fast.debuts').map(function(d){ return {texte:d, clic:function(){ pick(k, d); }}; })
       : ['oui','non','doute'].map(function(c, i){ return {texte:t('fast.choix.' + c), classe: i === 0 ? 'danger' : '', clic:function(){ pick(k, c); }}; });
-    ui.question(view, {n:step, total:KEYS.length, lettre:s.lettre, etiquette:t('fast.etape', {nom:s.nom, n:step + 1, total:KEYS.length}),
-      q:s.q, aide:s.aide, choix:choix, ecouter:function(){ CAA.say(s.aide + ' ' + s.q); },
+    var key = 'fast.etapes.' + k, picto = {visage:'visage', bras:'bras', parole:'parole', debut:'heure'}[k];
+    ui.question(view, {n:step, total:KEYS.length, lettre:s.lettre, picto:picto, etiquette:t('fast.etape', {nom:s.nom, n:step + 1, total:KEYS.length}),
+      q:s.q, aide:s.aide, choix:choix, ecouter:function(){ CAA.say(s.aide + ' ' + s.q, key); },
       retour:function(){ if (step === 0) CAA.go('home'); else { step--; draw(); } }});
-    CAA.say(s.aide + ' ' + s.q);
+    CAA.say(s.aide + ' ' + s.q, key);
   }
 
   function pick(k, v){

@@ -12,7 +12,7 @@ window.CAA = (function(){
   };
 
   /* Préférences : tout ce qui aide en urgence est activé d'office ; la personne peut couper dans Réglages */
-  var DEFAUTS = {langue:'fr', voix:true, gps:true, routage:true, proches:true, vibre:true, eveil:true, grand:false, contraste:false, region:'', accord:false};
+  var DEFAUTS = {langue:'fr', voix:true, picto:true, gps:true, routage:true, proches:true, vibre:true, eveil:true, grand:false, contraste:false, region:'', accord:false};
   function pref(k){ return store.get(k, DEFAUTS[k]); }
   function applyLook(){
     if (!document.body) return;
@@ -51,17 +51,33 @@ window.CAA = (function(){
     return v;
   }
 
-  /* Voix : lit un texte si le réglage est activé et si la langue a une voix sur le téléphone */
-  function hush(){ try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){} }
-  function say(text){
+  /* Voix : d'abord un enregistrement humain (audio/<langue>/<clé>.mp3) s'il existe pour la langue,
+     sinon la voix de synthèse du téléphone si la langue en a une. say(texte, clé) */
+  var player = null;
+  function hush(){
+    try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){}
+    try { if (player){ player.pause(); player = null; } } catch(e){}
+  }
+  function tts(text){
     try {
       var code = look(C.textes[pref('langue')], ['voix', 'code']);
-      if (!code || !pref('voix') || !window.speechSynthesis) return;
+      if (!code || !window.speechSynthesis) return;
       speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance(text);
       u.lang = code; u.rate = 0.95;
       speechSynthesis.speak(u);
     } catch(e){}
+  }
+  function say(text, key){
+    if (!pref('voix')) return;
+    hush();
+    var dir = look(C.textes[pref('langue')], ['voix', 'audio']);
+    if (!dir || !key || typeof Audio === 'undefined') return tts(text);
+    try {
+      player = new Audio(dir + key.replace(/\./g, '_') + '.mp3');
+      player.onerror = function(){ player = null; tts(text); };
+      player.play().catch(function(){ player = null; tts(text); });
+    } catch(e){ tts(text); }
   }
 
   /* Journal anonyme : alimente la base de données, seulement avec accord */
@@ -128,7 +144,16 @@ window.CAA = (function(){
     comprendre:'M4 5a2 2 0 0 1 2-2h13v15H6a2 2 0 0 0-2 2zM4 20a2 2 0 0 0 2 2h13M9 8h6',
     anevrisme:'M13 2L4 14h7l-1 8 9-12h-7z',
     association:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 8v.5M11 12h1v5',
-    tel:'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z'
+    tel:'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z',
+    formation:'M3 7l9-4 9 4-9 4zM6 9.5V15c0 1.5 3 3 6 3s6-1.5 6-3V9.5M21 7v5',
+    /* Pictogrammes des questions (gros, au-dessus de la question) */
+    visage:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM8.5 9.5h.01M15.5 9.5h.01M8 14c1 1.5 2.5 2 4 2M12 16c2 0 3.5-1.5 4-4',
+    bras:'M12 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM12 6v9M12 15l-3 6M12 15l3 6M12 7l-6-3M12 7l6 5',
+    parole:'M4 5h13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-7l-4 3v-3H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM7 10h.01M11 10h.01M15 10h.01',
+    heure:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
+    tete:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 6l1 3-2 2 2 2-1 3M8 9l1.5 1.5M16 9l-1.5 1.5',
+    nuque:'M12 7a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM12 7v6M8 21c0-4 1.5-6 4-8 2.5 2 4 4 4 8M15 9l3 1',
+    lumiere:'M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5'
   };
 
   /* Petits outils d'affichage partagés par tous les modules */
@@ -163,7 +188,8 @@ window.CAA = (function(){
     question: function(view, o){
       view.innerHTML = '';
       view.appendChild(ui.dots(o.total, o.n));
-      if (o.lettre) view.appendChild(h('div', {class:'letter', text:o.lettre}));
+      if (o.picto && pref('picto')) view.appendChild(h('div', {class:'pictorow'}, [ui.icon(o.picto, 'xl'), o.lettre ? h('div', {class:'letter', text:o.lettre}) : null]));
+      else if (o.lettre) view.appendChild(h('div', {class:'letter', text:o.lettre}));
       view.appendChild(h('div', {class:'stack'}, [ui.label(o.etiquette), h('h2', {text:o.q})]));
       if (o.aide) view.appendChild(h('p', {class:'instr', text:o.aide}));
       view.appendChild(h('div', {class:'stack'}, o.choix.map(function(c){ return h('button', {class:c.classe || '', text:c.texte, onclick:c.clic}); })));

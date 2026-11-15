@@ -42,6 +42,7 @@ CAA.textes.fr = {
     comprendre:{titre:'Comprendre l\'AVC', sous:'Signes, causes, idées fausses'},
     anevrisme:{titre:'Anévrisme', sous:'Mal de tête brutal'},
     association:{titre:'L\'association CAA', sous:''},
+    formation:{titre:'S\'entraîner', sous:'Cas pratiques, attestation'},
     reglages:{titre:'Réglages', sous:'Langue, voix, données'}
   },
   fast: {
@@ -124,16 +125,46 @@ CAA.textes.fr = {
   },
   carte: {
     aria:'Carte schématique du Sénégal avec les centres de prise en charge', moi:'Vous', neuro:'Service neurologique', hop:'Autre centre', cible:'Destinataire de l\'alerte',
-    note:'Carte schématique, pas une carte routière. Les positions des centres sont approximatives.'
+    note:'Carte schématique affichée sans réseau. Les positions des centres sont approximatives.',
+    osm:'Carte OpenStreetMap. Positions des centres approximatives, à valider.'
   },
   routage: {
     titre:'Centres de prise en charge', proche:'Centre le plus proche de vous', cible:'Alerte adressée à',
-    modegps:'Choisi d\'après votre position GPS.', moderegion:'Choisi d\'après la région indiquée dans vos réglages.', modedefaut:'Position inconnue : centre de référence national.',
+    modegps:'Choisi d\'après votre position GPS (distance à vol d\'oiseau).', modefiliere:'Centre de la filière d\'évacuation de votre région.', moderegion:'Choisi d\'après la région indiquée dans vos réglages.', modedefaut:'Position inconnue : centre de référence national.',
     confirm:'Le centre confirmera la prise en charge après réception. En attendant, suivez les consignes du SAMU.',
     attente:'Alerte envoyée · en attente de confirmation du centre',
     parsms:'Envoyer par SMS depuis mon téléphone', parsmsnote:'Ouvre votre application SMS avec le message prêt. Tant que les numéros des hôpitaux ne sont pas validés, vous choisissez le destinataire vous-même.',
     telavalider:'numéro à confirmer',
     resume:'Centre le plus proche : {proche} ({kmp} km). Service neurologique le plus proche : {cible} ({kmc} km).'
+  },
+  formation: {
+    intro:'{n} situations inspirées du terrain. À chaque fois, choisissez ce que vous feriez. Pensé pour les relais de santé et toute personne qui veut être prête.',
+    meilleur:'Votre meilleur score : {n} sur {total}.', commencer:'Commencer', cas_n:'Cas {n} sur {total}', question:'Que faites-vous ?', quitter:'Quitter l\'entraînement',
+    bravo:'Bonne réaction', rate:'Pas la bonne réaction', explication:'Pourquoi', suivant:'Cas suivant', resultat:'Voir mon résultat',
+    score:'Votre score', niveau_bas:'Vous êtes prêt à réagir.', niveau_moyen:'Bien. Refaites les cas manqués.', niveau_eleve:'Refaites l\'entraînement après avoir lu « Comprendre l\'AVC ».',
+    attestation:'Attestation d\'entraînement', nom:'Votre nom', nomex:'Ex. : Awa Ndiaye', generer:'Générer mon attestation',
+    attest_titre:'Attestation d\'entraînement', attest_texte:'{nom} a suivi l\'entraînement CAA.app à la reconnaissance des signes d\'AVC et a obtenu {score} sur {total}, le {date}.',
+    attest_note:'Faites une capture d\'écran pour la garder. Cette attestation ne vaut pas une formation médicale.', refaire:'Refaire l\'entraînement',
+    cas:[
+      {titre:'Au marché', recit:'Une vendeuse d\'une cinquantaine d\'années s\'arrête de parler au milieu d\'une phrase. Sa bouche est tordue d\'un côté. Elle dit que ça va passer.',
+        choix:['Lui donner de l\'eau sucrée et attendre','Appeler les secours tout de suite et noter l\'heure','L\'emmener chez le guérisseur du quartier','Lui dire de rentrer se reposer'], bonne:1,
+        explication:'Bouche tordue et parole coupée sont deux signes d\'AVC. Même si elle dit que ça va, chaque minute compte : on appelle et on note l\'heure de début.'},
+      {titre:'Le réveil', recit:'Votre oncle se réveille avec le bras gauche qui ne répond plus. Il a dormi normalement et personne ne sait depuis quand c\'est arrivé.',
+        choix:['Masser le bras avec du beurre de karité','Attendre midi pour voir si ça revient','Appeler les secours et dire que l\'heure de début est inconnue','Lui faire boire un café fort'], bonne:2,
+        explication:'Un bras qui ne répond plus est un signe d\'AVC. L\'heure de début inconnue est une information importante pour l\'hôpital : on la dit telle quelle, on n\'invente pas.'},
+      {titre:'Ça va mieux', recit:'Un homme a eu le visage qui tombait et du mal à parler pendant dix minutes. Maintenant tout est redevenu normal. Il veut reprendre le travail.',
+        choix:['Le laisser reprendre le travail, c\'est passé','Lui dire de consulter dans la semaine s\'il a le temps','Insister pour une consultation le jour même : c\'est un avertissement','Lui conseiller de dormir plus'], bonne:2,
+        explication:'Des signes qui disparaissent sont souvent un accident ischémique transitoire : un avertissement sérieux. Le risque d\'un vrai AVC est élevé dans les jours qui suivent. Consultation le jour même.'},
+      {titre:'Le mal de tête', recit:'Une jeune femme de 30 ans dit avoir le pire mal de tête de sa vie, arrivé d\'un coup. Elle ne supporte pas la lumière et a vomi.',
+        choix:['Un comprimé contre la douleur et une pièce sombre','Appeler les secours : mal de tête brutal, lumière insupportable, vomissements','Attendre que la douleur baisse pour décider','Lui faire manger quelque chose'], bonne:1,
+        explication:'Un mal de tête brutal et extrême, surtout avec gêne à la lumière et vomissements, peut être une rupture d\'anévrisme. Pas de médicament, pas d\'attente : les secours.'},
+      {titre:'En attendant l\'ambulance', recit:'Vous avez appelé les secours pour votre voisin qui a un AVC probable. Il a soif et sa famille veut lui donner ses médicaments pour la tension.',
+        choix:['Lui donner à boire et ses médicaments','Rien par la bouche, l\'allonger tête légèrement relevée, rester avec lui','Le faire marcher pour voir s\'il tient debout','Le mettre dans un taxi vers Dakar sans prévenir'], bonne:1,
+        explication:'Une personne qui fait un AVC peut avaler de travers : rien par la bouche. On l\'allonge, on reste avec elle, et on laisse le SAMU décider du transport et de la destination.'},
+      {titre:'Loin de tout', recit:'Vous êtes dans un village sans réseau internet. Une femme âgée a le bras et le visage qui tombent. Votre téléphone n\'a qu\'une barre de réseau.',
+        choix:['Attendre d\'avoir internet pour utiliser l\'appli','Faire le test dans l\'appli (elle marche sans internet), appeler, envoyer l\'alerte par SMS','Chercher un cybercafé','Renoncer à l\'appli et ne rien faire'], bonne:1,
+        explication:'L\'appli fonctionne sans internet une fois installée, et un appel ou un SMS passent avec une seule barre. Le test, l\'appel et le SMS d\'alerte sont possibles.'}
+    ]
   },
   reglages: {
     intro:'Tout ce qui aide en cas d\'urgence est activé d\'office. Vous pouvez désactiver ce que vous voulez.',
@@ -144,7 +175,7 @@ CAA.textes.fr = {
     routage:'Adresser l\'alerte au service neurologique le plus proche', routagenote:'Sinon, l\'alerte est adressée au centre de référence national.',
     region:'Ma région (si le GPS ne répond pas)', sansregion:'Non précisée',
     proches:'Prévenir mes proches en même temps', vibre:'Vibrer lors d\'une alerte', eveil:'Garder l\'écran allumé pendant une alerte',
-    affichage:'Affichage', grand:'Grands caractères', contraste:'Contraste renforcé',
+    affichage:'Affichage', picto:'Pictogrammes au-dessus des questions', grand:'Grands caractères', contraste:'Contraste renforcé',
     donnees:'Statistiques anonymes', accord:'J\'accepte que mes réponses servent aux statistiques de la CAA',
     accordnote:'Jamais de nom, de numéro ni de position exacte. L\'appli fonctionne pareil si vous refusez.',
     journal:'{n} événement(s) anonyme(s) enregistré(s) sur ce téléphone.', apercu:'Dernier enregistrement :',

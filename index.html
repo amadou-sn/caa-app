@@ -10,6 +10,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600;700&display=swap">
 <style>
 /* Layout : une colonne de téléphone, un écran à la fois, de gros boutons au pouce, une barre fixe en bas.
@@ -58,6 +60,9 @@ a{color:inherit}
 .ic svg{width:22px;height:22px;display:block}
 .ic.lg{width:48px;height:48px;border-radius:14px}
 .ic.lg svg{width:26px;height:26px}
+.ic.xl{width:96px;height:96px;border-radius:28px}
+.ic.xl svg{width:60px;height:60px;stroke-width:1.6}
+.pictorow{display:flex;align-items:center;gap:16px}
 .ic.sm{width:auto;height:auto;background:none;border-radius:0}
 .ic.sm svg{width:18px;height:18px}
 
@@ -143,6 +148,8 @@ label{font-weight:600;font-size:.9rem;display:flex;flex-direction:column;gap:6px
 /* Carte schématique */
 .map{background:var(--bg);border-radius:16px;padding:6px;border:1.5px solid var(--line)}
 .map svg{display:block;width:100%;height:auto}
+.map.real{height:300px;padding:0;overflow:hidden;z-index:0}
+.map.real .leaflet-tooltip{font:600 .8rem var(--body);border-radius:8px}
 .map .terre{fill:var(--soft);stroke:var(--muted);stroke-width:1.5;stroke-linejoin:round}
 .map .trou{fill:var(--bg);stroke:var(--muted);stroke-width:1}
 .map .ville{fill:var(--muted);font-size:13px;font-family:var(--body);text-anchor:middle}
@@ -170,6 +177,7 @@ body.contraste .card,body.contraste .num,body.contraste .tile,body.contraste .in
 :root[data-theme="dark"] body.contraste{--bg:#000;--surface:#000;--fg:#fff;--muted:#e0e0e0;--line:#fff;--soft:#222;--accent:#5ff0b0;--accent-fg:#000;--alert:#ff5a5a;--alert-fg:#000}
 pre{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85rem;white-space:pre-wrap;word-break:break-word;
   background:var(--bg);border:1.5px dashed var(--line);border-radius:12px;padding:12px}
+.attest{border:2px solid var(--accent);text-align:center;align-items:center}
 .note{border-left:4px solid var(--warn);padding:10px 12px;background:var(--soft);border-radius:0 12px 12px 0;font-size:.9rem}
 ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
 .status{font-weight:600}
@@ -201,12 +209,15 @@ ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
 <script src="config/sn.js"></script>
 <script src="config/base.js"></script>
 <script src="i18n/fr.js"></script>
+<script src="i18n/wo.js"></script>
+<script src="i18n/ff.js"></script>
 <script src="modules/carte.js"></script>
 <script src="modules/alerte.js"></script>
 <script src="modules/fast.js"></script>
 <script src="modules/anevrisme.js"></script>
 <script src="modules/risque.js"></script>
 <script src="modules/tension.js"></script>
+<script src="modules/formation.js"></script>
 <script src="modules/autres.js"></script>
 <script>CAA.start(); if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function(){});</script>
 </body>

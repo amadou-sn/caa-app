@@ -22,8 +22,13 @@ CAA.pays = {
     {id:'thies', nom:'Centre Hospitalier Régional de Thiès', ville:'Thiès', region:'Thiès', lat:14.790, lon:-16.930, services:['neurochirurgie'], tel:'+221 33 836 36 94', valide:false},
     {id:'kaolack', nom:'CHR El Hadji Ibrahima Niass', ville:'Kaolack', region:'Kaolack', lat:14.150, lon:-16.070, services:['neurochirurgie'], tel:'', valide:false},
     {id:'ziguinchor', nom:'Hôpital Régional de Ziguinchor', ville:'Ziguinchor', region:'Ziguinchor', lat:12.560, lon:-16.270, services:['neurologie'], tel:'+221 30 107 48 20', valide:false},
-    {id:'saintlouis', nom:'Centre Hospitalier Régional de Saint-Louis', ville:'Saint-Louis', region:'Saint-Louis', lat:16.030, lon:-16.500, services:['urgences'], tel:'', valide:false}
+    {id:'saintlouis', nom:'Centre Hospitalier Régional de Saint-Louis', ville:'Saint-Louis', region:'Saint-Louis', lat:16.030, lon:-16.500, services:['urgences'], tel:'', valide:false},
+    {id:'ndioum', nom:'Centre Hospitalier Régional de Ndioum', ville:'Ndioum (Podor)', region:'Saint-Louis', lat:16.517, lon:-14.650, services:['urgences'], tel:'', valide:false},
+    {id:'ourossogui', nom:'Centre Hospitalier Régional de Ourossogui', ville:'Ourossogui (Matam)', region:'Matam', lat:15.605, lon:-13.320, services:['urgences'], tel:'', valide:false}
   ],
+  /* Filière d'évacuation : quand le centre le plus proche est dans une de ces régions, l'alerte va au centre indiqué
+     plutôt qu'au service neuro le plus proche à vol d'oiseau (les routes ne suivent pas la ligne droite). À VALIDER. */
+  evacuation: {'Saint-Louis':'fann', 'Matam':'fann'},
   /* Carte schématique : contour simplifié du pays en (longitude, latitude). Pas une carte officielle. */
   carte: {
     lon0:-17.65, lat0:16.8, echelle:100, largeur:640, hauteur:460,

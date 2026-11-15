@@ -110,6 +110,7 @@ CAA.register({id:'reglages', hors:true, render:function(view){
     ]));
 
     view.appendChild(ui.card(t('reglages.affichage'), [
+      check('picto', t('reglages.picto')),
       check('grand', t('reglages.grand')),
       check('contraste', t('reglages.contraste'))
     ]));

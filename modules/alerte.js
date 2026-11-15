@@ -77,7 +77,7 @@ CAA.alerte = function(view, o){
       routeBox.appendChild(h('div', {class:'stack tight'}, [ui.label(t(R + 'cible')),
         h('b', {text:c.nom}), h('span', {class:'small muted', text:c.ville + ' · ' + svc(c) + (cx.dCible != null ? ' · ' + t('hopitaux.distance', {km:Math.round(cx.dCible)}) : '')}),
         c.tel ? h('span', {class:'small tab', text:c.tel + (c.valide ? '' : ' · ' + t(R + 'telavalider'))}) : null,
-        h('span', {class:'small muted', text:t(R + (cx.mode === 'gps' ? 'modegps' : cx.mode === 'region' ? 'moderegion' : 'modedefaut'))})]));
+        h('span', {class:'small muted', text:t(R + {gps:'modegps', filiere:'modefiliere', region:'moderegion'}[cx.mode] || 'modedefaut')})]));
     }
     routeBox.appendChild(CAA.carte({pos:gps, points:CAA.pays.hopitaux, cible:c, proche:p}));
     routeBox.appendChild(h('p', {class:'small muted', text:t(R + 'confirm')}));
@@ -104,5 +104,5 @@ CAA.alerte = function(view, o){
   }
 
   route(); find(); sms();
-  CAA.say(o.voix);
+  CAA.say(o.voix, o.voixCle || 'fast.alerte.voix');
 };
