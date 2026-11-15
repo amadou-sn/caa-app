@@ -11,11 +11,40 @@ window.CAA = (function(){
     clear: function(){ try { Object.keys(localStorage).forEach(function(k){ if (k.indexOf('caa.') === 0) localStorage.removeItem(k); }); } catch(e){} }
   };
 
+  /* Préférences : tout ce qui aide en urgence est activé d'office ; la personne peut couper dans Réglages */
+  var DEFAUTS = {langue:'fr', voix:true, gps:true, routage:true, proches:true, vibre:true, eveil:true, grand:false, contraste:false, region:'', accord:false};
+  function pref(k){ return store.get(k, DEFAUTS[k]); }
+  function applyLook(){
+    if (!document.body) return;
+    document.body.classList.toggle('grand', !!pref('grand'));
+    document.body.classList.toggle('contraste', !!pref('contraste'));
+  }
+
+  /* Position préparée au lancement : la permission est déjà accordée quand l'urgence arrive */
+  function prewarm(){
+    if (!pref('gps')) return;
+    try {
+      if (!navigator.geolocation) return;
+      navigator.geolocation.getCurrentPosition(function(p){
+        store.set('pos', {lat:p.coords.latitude, lon:p.coords.longitude, t:Date.now()});
+      }, function(){}, {timeout:10000, maximumAge:600000});
+    } catch(e){}
+  }
+  function vibrate(pattern){ try { if (pref('vibre') && navigator.vibrate) navigator.vibrate(pattern || [300, 150, 300, 150, 600]); } catch(e){} }
+  var lock = null;
+  function awake(){
+    try {
+      if (!pref('eveil') || !navigator.wakeLock) return;
+      navigator.wakeLock.request('screen').then(function(l){ lock = l; }, function(){});
+    } catch(e){}
+  }
+  function release(){ try { if (lock){ lock.release(); lock = null; } } catch(e){} }
+
   /* Textes : t('fast.alerte.titre') cherche dans la langue choisie, puis en français */
   function look(o, parts){ for (var i = 0; i < parts.length && o != null; i++) o = o[parts[i]]; return o == null ? undefined : o; }
   function t(path, vars){
     var parts = path.split('.');
-    var v = look(C.textes[store.get('langue', 'fr')], parts);
+    var v = look(C.textes[pref('langue')], parts);
     if (v === undefined) v = look(C.textes.fr, parts);
     if (v === undefined) return path;
     if (typeof v === 'string' && vars) for (var k in vars) v = v.split('{' + k + '}').join(vars[k]);
@@ -26,8 +55,8 @@ window.CAA = (function(){
   function hush(){ try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch(e){} }
   function say(text){
     try {
-      var code = look(C.textes[store.get('langue', 'fr')], ['voix', 'code']);
-      if (!code || !store.get('voix', true) || !window.speechSynthesis) return;
+      var code = look(C.textes[pref('langue')], ['voix', 'code']);
+      if (!code || !pref('voix') || !window.speechSynthesis) return;
       speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance(text);
       u.lang = code; u.rate = 0.95;
@@ -37,7 +66,7 @@ window.CAA = (function(){
 
   /* Journal anonyme : alimente la base de données, seulement avec accord */
   function track(type, data){
-    if (!store.get('accord', false)) return;
+    if (!pref('accord')) return;
     var d = new Date(), j = store.get('journal', []);
     var ev = {type:type, jour:d.toISOString().slice(0, 10), heure:d.getHours(), pays:C.pays.code};
     for (var k in (data || {})) ev[k] = data[k];
@@ -65,14 +94,18 @@ window.CAA = (function(){
     } catch(e){}
   }
 
-  /* Position GPS : répond toujours, avec null si indisponible */
+  /* Position GPS : répond toujours. Si le GPS échoue, la dernière position connue (moins de 15 min) est rendue avec approx:true. */
   function locate(cb){
     var done = false, tm = setTimeout(function(){ end(null); }, 8000);
-    function end(p){ if (done) return; done = true; clearTimeout(tm); cb(p); }
+    function fallback(){
+      var c = store.get('pos', null);
+      return (c && Date.now() - c.t < 15 * 60 * 1000) ? {lat:c.lat, lon:c.lon, approx:true} : null;
+    }
+    function end(p){ if (done) return; done = true; clearTimeout(tm); cb(p || fallback()); }
     try {
       if (!navigator.geolocation) return end(null);
       navigator.geolocation.getCurrentPosition(
-        function(p){ end({lat:p.coords.latitude, lon:p.coords.longitude}); },
+        function(p){ store.set('pos', {lat:p.coords.latitude, lon:p.coords.longitude, t:Date.now()}); end({lat:p.coords.latitude, lon:p.coords.longitude}); },
         function(){ end(null); }, {enableHighAccuracy:true, timeout:7000});
     } catch(e){ end(null); }
   }
@@ -184,7 +217,7 @@ window.CAA = (function(){
   }
 
   function go(id, params){
-    hush();
+    hush(); release();
     current = (id === 'home' || !byId[id] || !byId[id].render) ? 'home' : id;
     view.innerHTML = '';
     if (current === 'home') home(); else byId[current].render(view, params || {});
@@ -198,10 +231,14 @@ window.CAA = (function(){
     view = document.getElementById('view');
     nav = document.getElementById('nav');
     document.getElementById('brand').addEventListener('click', function(){ go('home'); });
+    applyLook();
     go('home');
     flush();
+    prewarm();
   };
-  C.store = store; C.t = t; C.say = say; C.track = track; C.locate = locate; C.km = km;
+  C.store = store; C.pref = pref; C.DEFAUTS = DEFAUTS; C.applyLook = applyLook;
+  C.vibrate = vibrate; C.awake = awake;
+  C.t = t; C.say = say; C.track = track; C.locate = locate; C.km = km;
   C.ui = ui; C.go = go; C.numbers = numbers; C.principal = principal;
   return C;
 })();

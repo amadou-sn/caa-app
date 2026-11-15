@@ -139,6 +139,35 @@ label{font-weight:600;font-size:.9rem;display:flex;flex-direction:column;gap:6px
 .pill.moyen{background:var(--warn);color:var(--warn-fg)}
 .pill.eleve{background:var(--alert);color:var(--alert-fg)}
 .chart svg{display:block;width:100%;height:auto}
+
+/* Carte schématique */
+.map{background:var(--bg);border-radius:16px;padding:6px;border:1.5px solid var(--line)}
+.map svg{display:block;width:100%;height:auto}
+.map .terre{fill:var(--soft);stroke:var(--muted);stroke-width:1.5;stroke-linejoin:round}
+.map .trou{fill:var(--bg);stroke:var(--muted);stroke-width:1}
+.map .ville{fill:var(--muted);font-size:13px;font-family:var(--body);text-anchor:middle}
+.map .etiq{fill:var(--fg);font-size:15px;font-weight:700;font-family:var(--body);text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.map .hop{fill:var(--muted);stroke:var(--bg);stroke-width:2}
+.map .neuro{fill:var(--accent);stroke:var(--bg);stroke-width:2}
+.map .proche{fill:var(--warn);stroke:var(--bg);stroke-width:2}
+.map .cible{fill:var(--alert);stroke:var(--bg);stroke-width:3}
+.map .moi{fill:var(--fg);stroke:var(--bg);stroke-width:3}
+.map .halo{fill:var(--fg);opacity:.15}
+.map .trajet{stroke:var(--alert);stroke-width:3;stroke-dasharray:8 6}
+@media (prefers-reduced-motion: no-preference){ .map .halo{animation:halo 1.6s ease-out infinite;transform-box:fill-box;transform-origin:center} }
+@keyframes halo{from{transform:scale(.5);opacity:.4}to{transform:scale(1.4);opacity:0}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.legend .neuro{background:var(--accent)} .legend .hop{background:var(--muted)} .legend .moi{background:var(--fg)} .legend .cible{background:var(--alert)}
+
+/* Accessibilité : grands caractères, contraste renforcé */
+body.grand{font-size:19px}
+body.grand h1{font-size:2.3rem}
+body.contraste{--bg:#ffffff;--surface:#ffffff;--fg:#000000;--muted:#2a2a2a;--line:#000000;--soft:#eaeaea;--accent:#005a3c;--alert:#b00014;--warn:#ffd400;--shadow:none}
+body.contraste .card,body.contraste .num,body.contraste .tile,body.contraste .instr{border:2px solid var(--line)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) body.contraste{--bg:#000;--surface:#000;--fg:#fff;--muted:#e0e0e0;--line:#fff;--soft:#222;--accent:#5ff0b0;--accent-fg:#000;--alert:#ff5a5a;--alert-fg:#000} }
+:root[data-theme="dark"] body.contraste{--bg:#000;--surface:#000;--fg:#fff;--muted:#e0e0e0;--line:#fff;--soft:#222;--accent:#5ff0b0;--accent-fg:#000;--alert:#ff5a5a;--alert-fg:#000}
 pre{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85rem;white-space:pre-wrap;word-break:break-word;
   background:var(--bg);border:1.5px dashed var(--line);border-radius:12px;padding:12px}
 .note{border-left:4px solid var(--warn);padding:10px 12px;background:var(--soft);border-radius:0 12px 12px 0;font-size:.9rem}
@@ -172,6 +201,7 @@ ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
 <script src="config/sn.js"></script>
 <script src="config/base.js"></script>
 <script src="i18n/fr.js"></script>
+<script src="modules/carte.js"></script>
 <script src="modules/alerte.js"></script>
 <script src="modules/fast.js"></script>
 <script src="modules/anevrisme.js"></script>

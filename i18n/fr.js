@@ -60,7 +60,7 @@ CAA.textes.fr = {
       appeler:'Appeler le {numero}', copier:'Copier le numéro', sinon:'Pas de réponse ? {nom} : {numero}',
       observe:'Ce que vous avez observé', horloge:'Alerte donnée à {heure} · début des signes : {debut}',
       ou:'Où êtes-vous ?', cherche:'Recherche de votre position GPS…', gpsok:'Position GPS trouvée : {lat}, {lon}',
-      gpsko:'GPS indisponible. Indiquez où vous êtes :', lieu:'Quartier et ville', lieuex:'Ex. : Grand Yoff, Dakar',
+      gpsko:'GPS indisponible. Indiquez où vous êtes :', gpsapprox:'GPS indisponible : dernière position connue utilisée. Précisez où vous êtes :', lieu:'Quartier et ville', lieuex:'Ex. : Grand Yoff, Dakar',
       repere:'Un repère connu à côté', repereex:'Ex. : en face de la mosquée, près du marché', regps:'Réessayer le GPS',
       proche:'Centre le plus proche : {nom}, à environ {km} km',
       message:'Message d\'alerte', envoyer:'Envoyer l\'alerte',
@@ -72,7 +72,7 @@ CAA.textes.fr = {
     },
     rien:{sur:'Résultat', titre:'Aucun des trois signes repérés',
       texte:'Cela ne garantit pas l\'absence d\'AVC. Mal de tête violent et soudain, trouble de la vue, perte d\'équilibre : dans le doute, appelez.', refaire:'Refaire le test'},
-    sms:{titre:'ALERTE AVC - CAA.app', heure:'Heure alerte : ', debut:'Début signes : ', gps:'GPS : ', lieu:'Lieu : ', repere:'Repère : ', inconnu:'Position : non précisée'}
+    sms:{titre:'ALERTE AVC - CAA.app', pour:'Pour : ', heure:'Heure alerte : ', debut:'Début signes : ', gps:'GPS : ', approx:' (approx.)', lieu:'Lieu : ', repere:'Repère : ', inconnu:'Position : non précisée', proche:'Centre proche du patient : '}
   },
   risque: {
     etape:'Question {n} sur {total}',
@@ -111,7 +111,7 @@ CAA.textes.fr = {
   hopitaux: {
     autour:'Trier par distance', cherche:'Recherche de votre position…', gpsko:'GPS indisponible. Choisissez votre région :',
     toutes:'Toutes les régions', distance:'à environ {km} km',
-    services:{neurologie:'Neurologie', neurochirurgie:'Neurochirurgie', urgences:'Urgences'},
+    services:{neurologie:'Neurologie', neurochirurgie:'Neurochirurgie', urgences:'Urgences'}, itineraire:'Itinéraire (Google Maps)',
     note:'Liste indicative, à valider avec la CAA. En urgence, appelez d\'abord le {numero} : le SAMU choisit l\'hôpital.'
   },
   apres: {
@@ -122,12 +122,33 @@ CAA.textes.fr = {
     ],
     note:'Contenus à valider et à enrichir par le neurologue référent et la CAA.'
   },
+  carte: {
+    aria:'Carte schématique du Sénégal avec les centres de prise en charge', moi:'Vous', neuro:'Service neurologique', hop:'Autre centre', cible:'Destinataire de l\'alerte',
+    note:'Carte schématique, pas une carte routière. Les positions des centres sont approximatives.'
+  },
+  routage: {
+    titre:'Centres de prise en charge', proche:'Centre le plus proche de vous', cible:'Alerte adressée à',
+    modegps:'Choisi d\'après votre position GPS.', moderegion:'Choisi d\'après la région indiquée dans vos réglages.', modedefaut:'Position inconnue : centre de référence national.',
+    confirm:'Le centre confirmera la prise en charge après réception. En attendant, suivez les consignes du SAMU.',
+    attente:'Alerte envoyée · en attente de confirmation du centre',
+    parsms:'Envoyer par SMS depuis mon téléphone', parsmsnote:'Ouvre votre application SMS avec le message prêt. Tant que les numéros des hôpitaux ne sont pas validés, vous choisissez le destinataire vous-même.',
+    telavalider:'numéro à confirmer',
+    resume:'Centre le plus proche : {proche} ({kmp} km). Service neurologique le plus proche : {cible} ({kmc} km).'
+  },
   reglages: {
-    langue:'Langue', avenir:'traduction à venir', voix:'Lire les questions à voix haute',
+    intro:'Tout ce qui aide en cas d\'urgence est activé d\'office. Vous pouvez désactiver ce que vous voulez.',
+    langue:'Langue et voix', avenir:'traduction à venir', voix:'Lire les questions à voix haute',
     voixnote:'La voix française dépend du téléphone. Le wolof et le pulaar passeront par des enregistrements.',
+    urgence:'En cas d\'urgence',
+    gps:'Préparer ma position au lancement', gpsnote:'L\'autorisation GPS est demandée tout de suite, pas au moment de l\'urgence. Position gardée sur le téléphone seulement.',
+    routage:'Adresser l\'alerte au service neurologique le plus proche', routagenote:'Sinon, l\'alerte est adressée au centre de référence national.',
+    region:'Ma région (si le GPS ne répond pas)', sansregion:'Non précisée',
+    proches:'Prévenir mes proches en même temps', vibre:'Vibrer lors d\'une alerte', eveil:'Garder l\'écran allumé pendant une alerte',
+    affichage:'Affichage', grand:'Grands caractères', contraste:'Contraste renforcé',
     donnees:'Statistiques anonymes', accord:'J\'accepte que mes réponses servent aux statistiques de la CAA',
     accordnote:'Jamais de nom, de numéro ni de position exacte. L\'appli fonctionne pareil si vous refusez.',
     journal:'{n} événement(s) anonyme(s) enregistré(s) sur ce téléphone.', apercu:'Dernier enregistrement :',
+    defauts:'Remettre les réglages recommandés', defautsok:'Réglages recommandés rétablis.',
     effacer:'Effacer toutes mes données', confirmer:'Confirmer l\'effacement', efface:'Données effacées.'
   }
 };
