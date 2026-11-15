@@ -1,0 +1,12 @@
+{
+  "name": "CAA.app",
+  "short_name": "CAA.app",
+  "description": "Reconnaître un AVC et alerter les secours.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f1f5f2",
+  "theme_color": "#0b6b4b",
+  "icons": [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+}
