@@ -61,16 +61,19 @@ CAA.register({id:'hopitaux', render:function(view){
   draw();
 }});
 
-CAA.register({id:'apres', render:function(view){
-  var ui = CAA.ui, h = ui.h, t = CAA.t;
-  view.appendChild(ui.head('apres'));
-  t('apres.blocs').forEach(function(b){ view.appendChild(ui.card(b.titre, [ui.list(b.points)])); });
-  view.appendChild(h('p', {class:'small muted', text:t('apres.note')}));
-  view.appendChild(ui.back());
-}});
+/* Fiches d'information : pour en ajouter une, écrire ses « blocs » dans i18n et ajouter son nom ici */
+['comprendre', 'apres'].forEach(function(id){
+  CAA.register({id:id, render:function(view){
+    var ui = CAA.ui, h = ui.h, t = CAA.t;
+    view.appendChild(ui.head(id));
+    t(id + '.blocs').forEach(function(b){ view.appendChild(ui.card(b.titre, [ui.list(b.points)])); });
+    view.appendChild(h('p', {class:'small muted', text:t(id + '.note')}));
+    view.appendChild(ui.back());
+  }});
+});
 
 /* À venir : il suffira d'écrire leur fonction render pour les activer */
-['comprendre', 'anevrisme', 'association'].forEach(function(id){ CAA.register({id:id, bientot:true}); });
+['association'].forEach(function(id){ CAA.register({id:id, bientot:true}); });
 
 CAA.register({id:'reglages', hors:true, render:function(view){
   var ui = CAA.ui, h = ui.h, t = CAA.t, S = CAA.store;

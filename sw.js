@@ -1,7 +1,6 @@
 /* Hors connexion : on essaie d'abord le réseau (pour avoir la dernière version), sinon la copie gardée sur le téléphone. */
-var CACHE = 'caa-v1';
-var FILES = ['./', 'index.html', 'core.js', 'config/sn.js', 'config/base.js', 'i18n/fr.js',
-  'modules/fast.js', 'modules/risque.js', 'modules/tension.js', 'modules/autres.js', 'icon.svg', 'manifest.webmanifest'];
+var CACHE = 'caa-v2';
+var FILES = ["./","index.html","core.js","icon.svg","manifest.webmanifest","config/base.js","config/sn.js","i18n/fr.js","modules/alerte.js","modules/anevrisme.js","modules/autres.js","modules/fast.js","modules/risque.js","modules/tension.js"];
 
 self.addEventListener('install', function(e){
   e.waitUntil(caches.open(CACHE).then(function(c){ return c.addAll(FILES); }).then(function(){ return self.skipWaiting(); }));

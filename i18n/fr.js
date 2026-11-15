@@ -4,10 +4,30 @@ CAA.textes.fr = {
   voix: {code:'fr-FR'},
   commun: {accueil:'Accueil', retour:'Retour', bientot:'Bientôt', copie:'Copié', ajouter:'Ajouter', supprimer:'Retirer', avalider:'À valider avec la CAA.'},
   urgence: {samu:'SAMU national', pompiers:'Sapeurs-pompiers'},
+  nav: {accueil:'Accueil', urgence:'Urgence', hopitaux:'Hôpitaux', reglages:'Réglages'},
+  anevrisme: {
+    etapes:{
+      tete:{nom:'Mal de tête', q:'Un mal de tête brutal et très violent ?', aide:'Arrivé d\'un coup, souvent décrit comme le pire mal de tête de sa vie.'},
+      nuque:{nom:'Nuque', q:'La nuque est-elle raide ou douloureuse ?', aide:'Demandez-lui de baisser le menton vers la poitrine.'},
+      lumiere:{nom:'Lumière', q:'La lumière la gêne-t-elle, ou vomit-elle ?', aide:'Forte gêne à la lumière, nausées ou vomissements.'}
+    },
+    alerte:{sur:'Rupture d\'anévrisme possible', voix:'Rupture d\'anévrisme possible. Appelez le SAMU maintenant.', sms:'ALERTE ANEVRISME - CAA.app'},
+    doute:{titre:'Pas de mal de tête brutal', texte:'Les signes observés peuvent avoir d\'autres causes. Consultez un médecin aujourd\'hui. Si un mal de tête violent apparaît ou si l\'état s\'aggrave, appelez les secours.'},
+    rien:{titre:'Aucun des trois signes repérés', texte:'Cela ne garantit pas l\'absence de problème. Dans le doute, appelez.'}
+  },
+  comprendre: {
+    blocs:[
+      {titre:'Qu\'est-ce qu\'un AVC ?', points:['Le sang n\'arrive plus dans une partie du cerveau : un vaisseau est bouché ou s\'est rompu.','Privées de sang, les cellules du cerveau meurent en quelques minutes.','Plus les secours arrivent tôt, plus on sauve de cerveau.']},
+      {titre:'Les signes à connaître', points:['Visage : un côté tombe ou ne bouge plus.','Bras : un bras ou une jambe devient faible ou engourdi.','Parole : la personne parle mal ou ne comprend plus.','Heure : notez l\'heure et appelez tout de suite.']},
+      {titre:'Les idées fausses', points:['« Ça va passer. » Même si les signes disparaissent, c\'est une alerte : il faut consulter le jour même.','« C\'est une maladie de vieux. » L\'AVC touche aussi des adultes jeunes.','« On verra demain. » Les traitements ne sont possibles que dans les premières heures.']},
+      {titre:'Ce qui augmente le risque', points:['La tension élevée, surtout si elle n\'est pas soignée.','Le diabète, le tabac, le manque d\'activité.','Un AVC déjà survenu, chez soi ou dans la famille.']}
+    ],
+    note:'Contenus à valider et à enrichir par le neurologue référent et la CAA.'
+  },
   accueil: {
     titre:'Un AVC ? Chaque minute compte.',
     intro:'Trois questions simples pour reconnaître les signes et alerter les secours.',
-    bouton:'Vérifier les signes maintenant',
+    bouton:'Vérifier les signes maintenant', boutonsous:'3 questions · moins d\'une minute',
     urgences:'Urgences · {pays}',
     modules:'Prévenir, suivre, comprendre',
     avertissement:'Cette appli aide à donner l\'alerte. Elle ne pose pas de diagnostic et ne remplace pas un médecin. En cas de doute, appelez le {numero}.'
@@ -19,8 +39,8 @@ CAA.textes.fr = {
     proches:{titre:'Mes proches', sous:'À prévenir en cas d\'alerte'},
     hopitaux:{titre:'Hôpitaux', sous:'Les centres près de vous'},
     apres:{titre:'Après un AVC', sous:'Rééducation, aidants'},
-    comprendre:{titre:'Comprendre l\'AVC', sous:''},
-    anevrisme:{titre:'Anévrisme', sous:''},
+    comprendre:{titre:'Comprendre l\'AVC', sous:'Signes, causes, idées fausses'},
+    anevrisme:{titre:'Anévrisme', sous:'Mal de tête brutal'},
     association:{titre:'L\'association CAA', sous:''},
     reglages:{titre:'Réglages', sous:'Langue, voix, données'}
   },
